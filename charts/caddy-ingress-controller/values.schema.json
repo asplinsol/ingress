@@ -58,7 +58,7 @@
     },
     "imagePullSecrets": {
       "$id": "#/properties/imagePullSecrets",
-      "type": "array"
+      "type": "string"
     },
     "nameOverride": {
       "$id": "#/properties/nameOverride",

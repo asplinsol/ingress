@@ -19,9 +19,9 @@ spec:
       labels:
         {{- include "caddy-ingress-controller.labels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
+      {{- if .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      - name: {{ .Values.imagePullSecrets }}
       {{- end }}
       serviceAccountName: {{ include "caddy-ingress-controller.serviceAccountName" . }}
       securityContext:
