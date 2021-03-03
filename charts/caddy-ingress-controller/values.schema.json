@@ -145,7 +145,23 @@
             "onDemandAsk": {
               "$id": "#/properties/ingressController/properties/config/properties/onDemandAsk",
               "type": "string"
-            }
+            },
+            "ZeroSSL_APIKEY": {
+              "$id": "#/properties/ingressController/properties/config/properties/ZeroSSL_APIKEY",
+              "type": "string"
+            },
+            "ZeroSSL_CA": {
+              "$id": "#/properties/ingressController/properties/config/properties/ZeroSSL_CA",
+              "type": "string",
+              "oneOf": [
+                {
+                  "format": "uri"
+                },
+                {
+                  "maxLength": 0
+                }
+              ]
+            },
           }
         },
         "verbose": {

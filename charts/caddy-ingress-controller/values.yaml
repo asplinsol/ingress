@@ -33,6 +33,10 @@ ingressController:
     # onDemandRateLimitInterval:
     # onDemandRateLimitBurst:
     # onDemandAsk:
+    # -- Zero SSL URL (Optional, defaults to production url if left blank)
+    acmeCA: ""
+    # -- Zero API KEY (Optional, but recommended)
+    ZeroSSL_APIKEY: ""
 
 serviceAccount:
   # Specifies whether a service account should be created

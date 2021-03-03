@@ -2,6 +2,7 @@ package caddy
 
 import (
 	"encoding/json"
+
 	caddy2 "github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/caddyconfig"
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
@@ -19,8 +20,39 @@ func LoadConfigMapOptions(config *Config, store *controller.Store) error {
 	if cfgMap.Debug {
 		config.Logging.Logs = map[string]*caddy2.CustomLog{"default": {Level: "DEBUG"}}
 	}
+	var onDemandConfig *caddytls.OnDemandConfig
+	if cfgMap.OnDemandTLS {
+		onDemandConfig = &caddytls.OnDemandConfig{
+			RateLimit: &caddytls.RateLimit{
+				Interval: cfgMap.OnDemandRateLimitInterval,
+				Burst:    cfgMap.OnDemandRateLimitBurst,
+			},
+			Ask: cfgMap.OnDemandAsk,
+		}
+	}
 
-	if cfgMap.AcmeCA != "" || cfgMap.Email != "" {
+	if cfgMap.ZeroSSLAPIKEY != "" {
+		zerosslIssuer := caddytls.ZeroSSLIssuer{
+			APIKey: cfgMap.ZeroSSLAPIKEY,
+		}
+		if cfgMap.ZeroSSLCA != "" {
+			zerosslIssuer.CA = cfgMap.ZeroSSLCA
+		}
+		if cfgMap.Email != "" {
+			zerosslIssuer.Email = cfgMap.Email
+		}
+		tlsApp.Automation = &caddytls.AutomationConfig{
+			OnDemand: onDemandConfig,
+			Policies: []*caddytls.AutomationPolicy{
+				{
+					IssuersRaw: []json.RawMessage{
+						caddyconfig.JSONModuleObject(zerosslIssuer, "module", "zerossl", nil),
+					},
+					OnDemand: cfgMap.OnDemandTLS,
+				},
+			},
+		}
+	} else if cfgMap.AcmeCA != "" || cfgMap.Email != "" {
 		acmeIssuer := caddytls.ACMEIssuer{}
 
 		if cfgMap.AcmeCA != "" {
@@ -29,17 +61,6 @@ func LoadConfigMapOptions(config *Config, store *controller.Store) error {
 
 		if cfgMap.Email != "" {
 			acmeIssuer.Email = cfgMap.Email
-		}
-
-		var onDemandConfig *caddytls.OnDemandConfig
-		if cfgMap.OnDemandTLS {
-			onDemandConfig = &caddytls.OnDemandConfig{
-				RateLimit: &caddytls.RateLimit{
-					Interval: cfgMap.OnDemandRateLimitInterval,
-					Burst:    cfgMap.OnDemandRateLimitBurst,
-				},
-				Ask: cfgMap.OnDemandAsk,
-			}
 		}
 
 		tlsApp.Automation = &caddytls.AutomationConfig{

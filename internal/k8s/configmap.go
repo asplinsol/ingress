@@ -20,6 +20,8 @@ type ConfigMapOptions struct {
 	OnDemandRateLimitInterval caddy.Duration `json:"onDemandTLSRateLimitInterval,omitempty"`
 	OnDemandRateLimitBurst    int            `json:"onDemandTLSRateLimitBurst,omitempty"`
 	OnDemandAsk               string         `json:"onDemandTLSAsk,omitempty"`
+	ZeroSSLAPIKEY             string         `json:"ZeroSSL_APIKEY,omitempty"`
+	ZeroSSLCA                 string         `json:"ZeroSSL_CA,omitempty"`
 }
 
 type ConfigMapHandlers struct {
