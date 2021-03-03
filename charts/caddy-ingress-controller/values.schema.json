@@ -161,7 +161,7 @@
                   "maxLength": 0
                 }
               ]
-            },
+            }
           }
         },
         "verbose": {
