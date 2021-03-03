@@ -11,7 +11,7 @@ image:
   pullPolicy: IfNotPresent
   tag: "latest"
 
-imagePullSecrets: []
+imagePullSecrets: ""
 nameOverride: ""
 fullnameOverride: ""
 
